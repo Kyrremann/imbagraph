@@ -1,0 +1,88 @@
+!!! 5
+%html
+  %head
+    %title= "Imbagraph"
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %link{:crossorigin => "anonymous", :href => "https://unpkg.com/purecss@1.0.0/build/pure-min.css", :integrity => "sha384-", :rel => "stylesheet"}/
+    %link{:href => "https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css", :rel => "stylesheet"}/
+    %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
+    %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"}
+
+  %body
+    .l-content
+      .boxes-tables.pure-g
+        = haml :_box, :locals => {:title => "this year", :text => locals[:this_year]}
+        = haml :_box, :locals => {:title => "this month", :text => locals[:this_month]}
+        = haml :_box, :locals => {:title => "this week", :text => locals[:this_week]}
+      .boxes-tables.pure-g
+        = haml :_box, :locals => {:title => "# beers", :text => locals[:beers]}
+        = haml :_box, :locals => {:title => "# unique beers", :text => locals[:unique_beers]}
+        = haml :_box, :locals => {:title => "max abv", :text => locals[:max_abv]}
+      .boxes-tables.pure-g
+        = haml :_box, :locals => {:title => "most per day", :text => locals[:most_per_day]}
+        = haml :_box, :locals => {:title => "most unique per day", :text => locals[:most_unique_per_day]}
+        = haml :_box, :locals => {:title => "avg abv", :text => locals[:avg_abv]}
+      .boxes-tables.pure-g
+        = haml :_box, :locals => {:title => "# countries", :text => locals[:countries]}
+        = haml :_box, :locals => {:title => "# breweries", :text => locals[:breweries]}
+        = haml :_box, :locals => {:title => "min abv", :text => locals[:min_abv]}
+
+      - yr_beer_counts = locals[:beers_per_yr_day].all.map{|i|i[:count]}
+      - yr_beer_days = locals[:beers_per_yr_day].all.map{|i|i[:created_yr_day].to_s}
+      - beer_counts = locals[:beers_per_day].all.map{|i|i[:count]}
+      - beer_days = locals[:beers_per_day].all.map{|i|i[:created_day].to_s}
+      .pure-g
+        .pure-u-1
+          %canvas#yr_beers{:height => "200", :width => "1600"}
+
+      .pure-g
+        .pure-u-1
+          %canvas#beers{:height => "200", :width => "1600"}
+
+      %p
+        Site and content subject to sudden change due to miscalculated Balmer's peak
+
+:javascript
+  var ctx = document.getElementById("yr_beers").getContext('2d');
+  var yr_beers = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: #{yr_beer_days},
+          datasets: [{
+              label: '# beers per yr day',
+              data: #{yr_beer_counts},
+              fill: false,
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+  });
+  
+  var ctx = document.getElementById("beers").getContext('2d');
+  var beers = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: #{beer_days},
+          datasets: [{
+              label: '# beer per day',
+              data: #{beer_counts},
+              fill: false,
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+  });
