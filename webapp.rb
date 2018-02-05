@@ -12,6 +12,10 @@ class ImbaGraph < Sinatra::Application
 
   get '/stats/:username/?' do
     items = get_items(params[:username])
+    unless items
+      return haml(:no_user)
+    end
+
     haml :stats, :locals => {
            :beers => items.count,
            :unique_beers => distinct(items).count,

@@ -5,7 +5,7 @@ require 'sequel'
 
 def get_items(name="kyrremann")
   db = Sequel.connect(get_database_url)
-  db[name.to_sym]
+  db.table_exists?(name) ? db[name.to_sym] : nil
 end
 
 def distinct(items, column_name="beer_name")
