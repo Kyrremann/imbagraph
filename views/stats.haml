@@ -6,14 +6,13 @@
     %link{:crossorigin => "anonymous", :href => "https://unpkg.com/purecss@1.0.0/build/pure-min.css", :integrity => "sha384-", :rel => "stylesheet"}/
     %link{:href => "https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css", :rel => "stylesheet"}/
     %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
-    %script{:src => "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"}
 
   %body
     .banner
       %h1.banner-head
         I might be an alcoholic
         %br
-        As I have had #{locals['beers']} since #{locals['first_beer']}, averaging #{locals['avg_beers']} a day
+        As I have had #{locals['beers']} beers since #{locals['first_beer']}, averaging #{locals['avg_beers']} beers a day
 
     .l-content
       .boxes-tables.pure-g
