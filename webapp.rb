@@ -12,7 +12,7 @@ class ImbaGraph < Sinatra::Application
   end
 
   get '/stats/:user' do
-    get_stats_haml(params['user']
+    get_stats_haml(params['user'])
   end
 end
 
