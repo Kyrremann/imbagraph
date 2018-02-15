@@ -23,7 +23,7 @@ def get_stats_haml(user)
     return haml(:no_user)
   end
 
-  yearly_stats = generate_yearly_stats
+  yearly_stats = generate_yearly_stats(items)
   haml :stats, :locals => {
          "beers" => items.count,
          "unique_beers" => distinct(items).count,

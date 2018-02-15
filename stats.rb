@@ -3,7 +3,7 @@
 
 require 'sequel'
 
-def get_items(name="kyrremann")
+def get_items(name)
   db = Sequel.connect(get_database_url)
   db.table_exists?(name) ? db[name.to_sym] : nil
 end
@@ -53,8 +53,7 @@ def avg_beers(items)
   items.count / (Time.now.to_date - items.min(:created_day)).to_f
 end
 
-def generate_yearly_stats
-  items = get_items
+def generate_yearly_stats(items)
   years = (items.min(:created_at).year..Time.now.year)
   data = {}
 
