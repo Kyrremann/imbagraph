@@ -1,7 +1,18 @@
+- stat = locals['stat']
 .pure-u-1.pure-u-md-1-3
   .boxes-table.boxes-table-free
     .boxes-table-header
       %h2
-        = locals[:title]
+        = locals['year']
       %span.boxes-table-text
-        = locals[:text]
+        = stat['total']
+        %span beers
+    %ul.boxes-table-list
+      %li Unique beers: #{stat['total_unique']}
+      %li Max abv: #{stat['max_abv']}%
+      %li Avg abv: #{stat['avg_abv']}%
+      %li Countries: #{stat['countries']}
+      %li Breweries: #{stat['breweries']}
+      %li Most per day: #{stat['most_per_day']}
+      %li Most unique per day: #{stat['most_unique_per_day']}
+    %button.button-choose.pure-button Monthly
