@@ -32,16 +32,16 @@ def min_abv(items)
   items.where(Sequel.lit('beer_abv > 0')).min(:beer_abv)
 end
 
-def last_days(items, days, yr=true)
+def last_days(items, days, yr=false)
   items.where(get_column_name(yr) => (Date.today - days)..(Date.today))
 end
 
-def beers_per_day(items, yr=true)
+def beers_per_day(items, yr=false)
   column_name = get_column_name(yr)
   items.group_and_count(column_name).order(column_name)
 end
 
-def most_per_day(items, yr=true)
+def most_per_day(items, yr=false)
   beers_per_day(items, yr).order(Sequel.desc(:count)).first[:count]
 end
 
