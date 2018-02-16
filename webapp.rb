@@ -8,7 +8,7 @@ require_relative 'stats'
 class ImbaGraph < Sinatra::Application
 
   get '/' do
-    get_stats_haml('kyrremann')
+    get_complete_stats_haml('kyrremann')
   end
 
   get '/stats/:user/:year' do
