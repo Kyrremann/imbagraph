@@ -1,9 +1,16 @@
 - stat = locals['stat']
+- if locals['year']
+  - header = locals['year']
+  - button = true
+- else
+  - header = locals['month']
+  - button = false
+
 .pure-u-1.pure-u-md-1-3
   .boxes-table.boxes-table-free
     .boxes-table-header
       %h2
-        = locals['year']
+        = header
       %span.boxes-table-text
         = stat['total']
         %span beers
@@ -15,4 +22,6 @@
       %li Breweries: #{stat['breweries']}
       %li Most beers per day: #{stat['most_per_day']}
       %li Most unique per day: #{stat['most_unique_per_day']}
-    %button.button-choose.pure-button Monthly
+      %li Avg per day: #{stat['avg_per_day']}
+    - if button
+      %a.button-choose.pure-button{:href => "#{request.path_info}/#{locals['year']}"} Monthly

@@ -15,7 +15,7 @@
         As I have had #{locals['beers']} beers since #{locals['first_beer']}, averaging #{locals['avg_beers']} beers a day
 
     .l-content
-      - locals["yearly_stats"].each_slice(3) do | group |
+      - locals["stats"].each_slice(3) do | group |
         .boxes-tables.pure-g
           - group.each do | year, stat |
             = haml :_box, :locals => {'year' => year, 'stat' => stat}

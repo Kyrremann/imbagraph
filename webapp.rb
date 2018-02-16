@@ -11,26 +11,43 @@ class ImbaGraph < Sinatra::Application
     get_stats_haml('kyrremann')
   end
 
+  get '/stats/:user/:year' do
+    get_yearly_stats_haml(params['user'], params['year'])
+  end
+
   get '/stats/:user' do
-    get_stats_haml(params['user'])
+    get_complete_stats_haml(params['user'])
   end
 end
 
 private
-def get_stats_haml(user)
+def get_complete_stats_haml(user)
   items = get_items(user)
   unless items
     return haml(:no_user)
   end
 
-  yearly_stats = generate_yearly_stats(items)
-  haml :stats, :locals => {
+  stats = generate_yearly_stats(items)
+  haml :yearly_stats, :locals => {
          "beers" => items.count,
-         "unique_beers" => distinct(items).count,
          "first_beer" => first_beer(items).to_date,
          "avg_beers" => avg_beers(items).round(2),
-         "beers_per_yr_day" => beers_per_day(items),
-         "beers_per_day" => beers_per_day(items, yr=false),
-         "yearly_stats" => yearly_stats
+         "stats" => stats
+       }
+end
+
+def get_yearly_stats_haml(user, year)
+  items = get_items(user)
+  unless items
+    return haml(:no_user)
+  end
+  beers = filter_by_year(items, year)
+  stats = generate_monthly_stats(items, year)
+  haml :monthly_stats, :locals => {
+         "year" => year,
+         "beers" => beers.count,
+         "first_beer" => first_beer(beers),
+         "avg_beers" => avg_beers(beers).round(2),
+         "stats" => stats
        }
 end

@@ -1,0 +1,24 @@
+!!! 5
+%html
+  %head
+    %title= "Imbagraph"
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %link{:crossorigin => "anonymous", :href => "https://unpkg.com/purecss@1.0.0/build/pure-min.css", :integrity => "sha384-", :rel => "stylesheet"}/
+    %link{:href => "https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css", :rel => "stylesheet"}/
+    %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
+
+  %body
+    .banner
+      %h1.banner-head
+        I might be an alcoholic
+        %br
+        As in #{locals['year']} i had #{locals['beers']} beers, and i started drinking #{locals['first_beer'].strftime("%d.%m %H:%M")}, averaging #{locals['avg_beers']} beers a day
+
+    .l-content
+      - locals["stats"].each_slice(3) do | group |
+        .boxes-tables.pure-g
+          - group.each do | month, stat |
+            = haml :_box, :locals => {'month' => month, 'stat' => stat}
+
+    %p{:style => "text-align: center"}
+      Site and content subject to sudden change due to miscalculated Balmer's peak
