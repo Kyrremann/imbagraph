@@ -31,6 +31,8 @@ unless DB.table_exists?(username)
     String :beer_type
     String :brewery_name
     String :brewery_country
+    String :venue_name
+    String :venue_country
     Float :beer_abv
     Integer :beer_ibu
     Integer :rating_score
@@ -53,6 +55,8 @@ untappd_json.each do | check_in |
   beer_ibu  = check_in['beer_ibu'].to_i
   brewery_name = check_in['brewery_name']
   brewery_country = check_in['brewery_country']
+  venue_name = check_in['venue_name']
+  venue_country = check_in['venue_country']
   created_yr_day = DateTime.parse(created_at)
   if created_yr_day.hour < 6
     created_yr_day = created_yr_day - 1
@@ -65,6 +69,8 @@ untappd_json.each do | check_in |
                :beer_ibu => beer_ibu,
                :brewery_name => brewery_name,
                :brewery_country => brewery_country,
+               :venue_name => venue_name,
+               :venue_country => venue_country,
                :created_day => created_at,
                :created_yr_day => created_yr_day,
                :created_at => created_at,
