@@ -20,8 +20,9 @@
       %li Avg abv: #{stat['avg_abv']}%
       %li Countries: #{stat['countries']}
       %li Breweries: #{stat['breweries']}
+      %li Venues: #{stat['venues']}
       %li Most beers per day: #{stat['most_per_day']}
       %li Most unique per day: #{stat['most_unique_per_day']}
       %li Avg per day: #{stat['avg_per_day']}
     - if button
-      %a.button-choose.pure-button{:href => "stats/#{locals['user']}/#{locals['year']}"} Monthly
+      %a.button-choose.pure-button{:href => "/stats/#{locals['user']}/#{locals['year']}"} Monthly

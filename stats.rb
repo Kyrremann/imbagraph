@@ -53,8 +53,8 @@ def first_beer(items)
   items.min(:created_at)
 end
 
-def avg_beers(items)
-  items.count / (Time.now.to_date - items.min(:created_day)).to_f
+def avg_beers(items, days_in_periode)
+  items.count / (days_in_periode).to_f
 end
 
 def generate_yearly_stats(items)
@@ -62,17 +62,9 @@ def generate_yearly_stats(items)
   data = {}
 
   years.each do | year |
+    days_in_year = Date.new(year, 12, 31).yday
     beers = filter_by_year(items, year)
-    data[year.to_s] = {
-      "total" => beers.count,
-      "total_unique" => distinct(beers).count,
-      "max_abv" => max_abv(beers),
-      "avg_abv" => avg_abv(beers).round(2),
-      "countries" => distinct(beers, column_name="brewery_country").count,
-      "breweries" => distinct(beers, column_name="brewery_name").count,
-      "most_per_day" => most_per_day(beers),
-      "most_unique_per_day" => -1
-    }
+    data[year.to_s] = create_periode(beers, days_in_year)
   end
 
   return data
@@ -83,41 +75,43 @@ def generate_monthly_stats(items, year)
   items = filter_by_year(items, year)
 
   (1..12).each do | month |
+    days_in_month = Date.new(year, month, -1).day
     beers = filter_by_month(items, month)
-    month_name = get_month_name(month)
-    if beers.count == 0
-      data[month_name] = empty_periode
-    else
-      data[month_name] = {
-        "total" => beers.count,
-        "total_unique" => distinct(beers).count,
-        "max_abv" => max_abv(beers),
-        "avg_abv" => avg_abv(beers).round(2),
-        "countries" => distinct(beers, column_name="brewery_country").count,
-        "breweries" => distinct(beers, column_name="brewery_name").count,
-        "most_per_day" => most_per_day(beers),
-        "most_unique_per_day" => -1,
-        "avg_per_day" => -1
-      }
-    end
+    data[get_month_name(month)] = create_periode(beers, days_in_month)
   end
 
   return data
 end
 
 private
-def empty_periode
-  return {
-        "total" => 0,
-        "total_unique" => 0,
-        "max_abv" => 0,
-        "avg_abv" => 0,
-        "countries" => 0,
-        "breweries" => 0,
-        "most_per_day" => 0,
-        "most_unique_per_day" => 0,
-        "avg_per_day" => 0
-  }
+def create_periode(items, days_in_periode)
+  if items.count == 0
+    return {
+      "total" => 0,
+      "total_unique" => 0,
+      "max_abv" => 0,
+      "avg_abv" => 0,
+      "countries" => 0,
+      "breweries" => 0,
+      "venues" => 0,
+      "most_per_day" => 0,
+      "most_unique_per_day" => 0,
+      "avg_per_day" => 0
+    }
+  else
+    return {
+      "total" => items.count,
+      "total_unique" => distinct(items).count,
+      "max_abv" => max_abv(items),
+      "avg_abv" => avg_abv(items).round(2),
+      "countries" => distinct(items, column_name="brewery_country").count,
+      "breweries" => distinct(items, column_name="brewery_name").count,
+      "venues" => distinct(items, column_name="venue_name").count,
+      "most_per_day" => most_per_day(items),
+      "most_unique_per_day" => -1,
+      "avg_per_day" => avg_beers(items, days_in_periode).round(2)
+    }
+  end
 end
 
 def get_column_name(yr)
@@ -128,31 +122,7 @@ def get_database_url
   ENV['DATABASE_URL'] ? ENV['DATABASE_URL'] : 'postgres://postgres:postgres@localhost:5432/postgres'
 end
 
+$months = ["dummy_month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 def get_month_name(month)
-  case month
-  when 1
-    "January"
-  when 2
-    "February"
-  when 3
-    "March"
-  when 4
-    "April"
-  when 5
-    "May"
-  when 6
-    "June"
-  when 7
-    "July"
-  when 8
-    "August"
-  when 9
-    "September"
-  when 10
-    "October"
-  when 11
-    "November"
-  when 12
-    "December"
-  end
+  return $months[month]
 end
