@@ -53,6 +53,7 @@ def get_yearly_stats_haml(user, year)
          "beers" => beers.count,
          "first_beer" => first_beer(beers),
          "avg_beers" => avg_beers(beers, days_in_year).round(2),
+         "user" => user,
          "stats" => stats
        }
 end
