@@ -76,7 +76,7 @@ def get_complete_stats_haml(user)
   start_date = items.min(:created_day)
   end_date = Time.now.to_date
   days_in_periode = end_date - start_date
-  haml(yearly_stats, :locals => {
+  haml(:yearly_stats, :locals => {
          "beers" => items.count,
          "first_beer" => first_beer(items).to_date,
          "avg_beers" => avg_beers(items, days_in_periode).round(2),
