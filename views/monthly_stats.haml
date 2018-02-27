@@ -9,10 +9,7 @@
 
   %body
     .banner
-      %a.button-secondary.pure-button.menu-button{:href => "/stats/#{locals['user']}"}
-        Home
-      -# %a.button-secondary.pure-button.menu-button.pull-right{:href => "/upload"}
-        Upload
+      = haml(:_menu, :locals => {'user' => locals['user']})
       %h1.banner-head
         I might be an alcoholic
         %br
@@ -22,7 +19,7 @@
       - locals["stats"].each_slice(3) do | group |
         .boxes-tables.pure-g
           - group.each do | month, stat |
-            = haml :_box, :locals => {'month' => month, 'stat' => stat}
+            = haml(:_box, :locals => {'month' => month, 'stat' => stat})
 
     %p{:style => "text-align: center"}
       Site and content subject to sudden change due to miscalculated Balmer's peak

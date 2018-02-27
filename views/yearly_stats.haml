@@ -9,6 +9,7 @@
 
   %body
     .banner
+      = haml(:_menu, :locals => {'user' => locals['user']})
       %h1.banner-head
         I might be an alcoholic
         %br
@@ -18,7 +19,7 @@
       - locals["stats"].each_slice(3) do | group |
         .boxes-tables.pure-g
           - group.each do | year, stat |
-            = haml :_box, :locals => {'year' => year, 'stat' => stat, 'user' => locals['user']}
+            = haml(:_box, :locals => {'year' => year, 'stat' => stat, 'user' => locals['user']})
 
     %p{:style => "text-align: center"}
       Site and content subject to sudden change due to miscalculated Balmer's peak
