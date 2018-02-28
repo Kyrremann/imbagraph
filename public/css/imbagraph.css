@@ -115,6 +115,11 @@ p {
     background: #2c4985;
 }
 
+
+.boxes-table-empty .boxes-table-header {
+    background: #eeeeee;
+}
+
 /*
  * -- BOXES TABLE HEADER --
  * By default, a header is black/white, and has some styles for its <h2> name.

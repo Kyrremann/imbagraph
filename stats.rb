@@ -81,7 +81,7 @@ def generate_monthly_stats(items, year)
   (1..12).each do | month |
     days_in_month = Date.new(year, month, -1).day
     beers = filter_by_month(items, month)
-    data[get_month_name(month)] = create_periode(beers, days_in_month)
+    data[month] = create_periode(beers, days_in_month)
   end
 
   return data
@@ -124,9 +124,4 @@ end
 
 def get_database_url
   ENV['DATABASE_URL'] ? ENV['DATABASE_URL'] : 'postgres://postgres:postgres@localhost:5432/postgres'
-end
-
-$months = ["dummy_month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-def get_month_name(month)
-  return $months[month]
 end

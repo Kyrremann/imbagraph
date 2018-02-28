@@ -19,7 +19,8 @@
       - locals["stats"].each_slice(3) do | group |
         .boxes-tables.pure-g
           - group.each do | month, stat |
-            = haml(:_box, :locals => {'month' => month, 'stat' => stat})
+            - break if month > Time.now.month
+            = haml(:_box, :locals => {'month' => get_month_name(month), 'stat' => stat})
 
     %p{:style => "text-align: center"}
       Site and content subject to sudden change due to miscalculated Balmer's peak

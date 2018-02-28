@@ -108,3 +108,8 @@ def get_yearly_stats_haml(user, year)
        }
       )
 end
+
+$months = ["dummy_month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+def get_month_name(month)
+  return $months[month]
+end
