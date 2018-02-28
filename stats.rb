@@ -63,6 +63,10 @@ def generate_yearly_stats(items)
 
   years.each do | year |
     days_in_year = Date.new(year, 12, 31).yday
+    if year == Time.now.year
+      days_in_year = Time.now.yday
+    end
+
     beers = filter_by_year(items, year)
     data[year.to_s] = create_periode(beers, days_in_year)
   end

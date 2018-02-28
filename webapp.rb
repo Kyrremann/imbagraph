@@ -94,6 +94,10 @@ def get_yearly_stats_haml(user, year)
   beers = filter_by_year(items, year)
   stats = generate_monthly_stats(items, year)
   days_in_year = Date.new(year, 12, 31).yday
+  if year == Time.now.year
+    days_in_year = Time.now.yday
+  end
+
   haml(:monthly_stats, :locals => {
          "year" => year,
          "beers" => beers.count,
