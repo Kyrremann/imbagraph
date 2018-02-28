@@ -19,7 +19,7 @@
       - locals["stats"].each_slice(3) do | group |
         .boxes-tables.pure-g
           - group.each do | month, stat |
-            - break if month > Time.now.month
+            - break if locals['year'] == Time.now.year and month > Time.now.month
             = haml(:_box, :locals => {'month' => get_month_name(month), 'stat' => stat})
 
     %p{:style => "text-align: center"}
