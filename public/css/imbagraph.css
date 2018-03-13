@@ -253,3 +253,20 @@ p {
     position: absolute;
     margin: .5em;
 }
+
+/*
+ * -- FLASH --
+ */
+.flash {
+    display: block;
+    text-align: center;
+    font-weight: normal;
+    padding: 0.77778rem 1.33333rem 0.77778rem 0.77778rem;
+    position: relative;
+    transition: opacity 300ms ease-out;
+}
+
+.alert .success {
+    background-color: #43AC6A;
+    color: #FFFFFF;
+}

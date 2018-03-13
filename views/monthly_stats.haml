@@ -8,6 +8,8 @@
     %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
 
   %body
+    .alert
+      = styled_flash
     .banner
       = haml(:_menu, :locals => {'user' => locals['user']})
       %h1.banner-head

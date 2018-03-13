@@ -1,6 +1,7 @@
 #! /bin/ruby
 
 require 'sinatra'
+require 'sinatra/flash'
 require 'haml'
 require 'securerandom'
 
@@ -27,6 +28,10 @@ class ImbaGraph < Sinatra::Application
 
   get '/stats/:user/?' do
     rows = session[:rows]
+    if rows
+      flash.now['success'] = "We added #{rows} check-ins"
+      session[:rows] = nil
+    end
     get_complete_stats_haml(params['user'])
   end
 
@@ -57,6 +62,7 @@ class ImbaGraph < Sinatra::Application
     user = session[:user]
     uuid = session[:uuid]
     rows = session[:rows]
+    session[:rows] = nil
     haml(:welcome, :locals => {'uuid' => uuid, 'user' => user, 'rows' => rows})
   end
 
