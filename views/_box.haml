@@ -4,7 +4,7 @@
   - button = true
   - padding = ""
 - else
-  - header = locals['month']
+  - header = Date::MONTHNAMES[locals['month']]
   - button = false
   - padding = "padding: 0;"
 
@@ -23,11 +23,12 @@
           %li Unique beers: #{stat['total_unique']}
           %li Max abv: #{stat['max_abv']}%
           %li Avg abv: #{stat['avg_abv']}%
-          %li Countries: #{stat['countries']}
           %li Breweries: #{stat['breweries']}
+          %li Brewery countries: #{stat['brewery_countries']}
           %li Venues: #{stat['venues']}
-          %li Most beers per day: #{stat['most_per_day']}
-          %li Most unique per day: #{stat['most_unique_per_day']}
+          %li Venue countries: #{stat['venue_countries']}
+          %li Most beers per day: #{stat['most_per_day'][:count]} (#{stat['most_per_day'][:date]})
+          %li Most unique per day: #{stat['most_unique_per_day'][:count]} (#{stat['most_unique_per_day'][:date]})
           %li Avg per day: #{stat['avg_per_day']}
         - if button
-          %a.button-choose.pure-button{:href => "/stats/#{locals['user']}/#{locals['year']}"} Monthly
+          %a.button-choose.pure-button{:href => "/stats/#{locals['user'].username}/#{locals['year']}"} Monthly

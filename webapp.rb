@@ -5,6 +5,7 @@ require 'sinatra/flash'
 require 'haml'
 require 'securerandom'
 
+require_relative 'models/init'
 require_relative 'stats'
 require_relative 'feed_pg'
 
@@ -13,7 +14,7 @@ class ImbaGraph < Sinatra::Application
   enable :sessions
 
   get '/' do
-    get_complete_stats_haml('kyrremann')
+    'hello world'
   end
 
   get '/stats/:user/upload' do
@@ -23,7 +24,14 @@ class ImbaGraph < Sinatra::Application
   end
 
   get '/stats/:user/:year/?' do
-    get_yearly_stats_haml(params['user'], params['year'].to_i)
+    username = params['user']
+    user = User.find(:username => username)
+    unless user
+      return haml(:no_user, :locals => {'user' => username})
+    end
+    year = params['year'].to_i
+
+    haml(:monthly_stats, :locals => {"user" => user, 'year' => year})
   end
 
   get '/stats/:user/?' do
@@ -32,7 +40,14 @@ class ImbaGraph < Sinatra::Application
       flash.now['success'] = "We added #{rows} check-ins"
       session[:rows] = nil
     end
-    get_complete_stats_haml(params['user'])
+
+    username = params['user']
+    user = User.find(:username => username)
+    unless user
+      return haml(:no_user, :locals => {'user' => username})
+    end
+
+    haml(:yearly_stats, :locals => {"user" => user})
   end
 
   post '/upload' do
@@ -72,49 +87,6 @@ class ImbaGraph < Sinatra::Application
 end
 
 private
-def get_complete_stats_haml(user)
-  items = get_items(user)
-  unless items
-    return haml(:no_user, :locals => {'user' => user})
-  end
-
-  stats = generate_yearly_stats(items)
-  start_date = items.min(:created_day)
-  end_date = Time.now.to_date
-  days_in_periode = end_date - start_date
-  haml(:yearly_stats, :locals => {
-         "beers" => items.count,
-         "first_beer" => first_beer(items).to_date,
-         "avg_beers" => avg_beers(items, days_in_periode).round(2),
-         "user" => user,
-         "stats" => stats
-       }
-      )
-end
-
-def get_yearly_stats_haml(user, year)
-  items = get_items(user)
-  unless items
-    return haml(:no_user)
-  end
-  beers = filter_by_year(items, year)
-  stats = generate_monthly_stats(items, year)
-  days_in_year = Date.new(year, 12, 31).yday
-  if year == Time.now.year
-    days_in_year = Time.now.yday
-  end
-
-  haml(:monthly_stats, :locals => {
-         "year" => year,
-         "beers" => beers.count,
-         "first_beer" => first_beer(beers),
-         "avg_beers" => avg_beers(beers, days_in_year).round(2),
-         "user" => user,
-         "stats" => stats
-       }
-      )
-end
-
 $months = ["dummy_month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 def get_month_name(month)
   return $months[month]

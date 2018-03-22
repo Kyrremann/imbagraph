@@ -8,21 +8,22 @@
     %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
 
   %body
+    - user = locals['user']
+    - year = locals['year']
     .alert
       = styled_flash
     .banner
-      = haml(:_menu, :locals => {'user' => locals['user']})
+      = haml(:_menu, :locals => {'username' => user.username})
       %h1.banner-head
         I might be an alcoholic
         %br
-        As in #{locals['year']} i had #{locals['beers']} beers, and i started drinking #{locals['first_beer'].strftime("%d.%m %H:%M")}, averaging #{locals['avg_beers']} beers a day
+        As in #{year} i had #{user.beers_for_year(year).count} beers, and i started drinking #{user.first_beer(year).strftime("%d.%m %H:%M")}, averaging #{user.avg_beers(year).round(2)} beers a day
 
     .l-content
-      - locals["stats"].each_slice(3) do | group |
+      - user.months_drinking(year).each_slice(3) do | months |
         .boxes-tables.pure-g
-          - group.each do | month, stat |
-            - break if locals['year'] == Time.now.year and month > Time.now.month
-            = haml(:_box, :locals => {'month' => get_month_name(month), 'stat' => stat})
+          - months.each do | month |
+            = haml(:_box, :locals => {'month' => month, 'stat' => user.get_stats_for_month(year, month)})
 
     %p{:style => "text-align: center"}
       Site and content subject to sudden change due to miscalculated Balmer's peak

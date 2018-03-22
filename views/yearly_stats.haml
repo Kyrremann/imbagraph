@@ -8,19 +8,21 @@
     %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
 
   %body
+    - user = locals['user']
     .alert
       = styled_flash
     .banner
-      = haml(:_menu, :locals => {'user' => locals['user']})
+      = haml(:_menu, :locals => {'username' => user.username})
       %h1.banner-head
         I might be an alcoholic
         %br
-        As I have had #{locals['beers']} beers since #{locals['first_beer'].strftime("%d.%m.%Y")}, averaging #{locals['avg_beers']} beers a day
+        As I have had #{user.beers.count} beers since #{user.first_beer.to_date.strftime("%d.%m.%Y")}, averaging #{user.avg_beers.round(2)} beers a day
 
     .l-content
-      - locals["stats"].each_slice(3) do | group |
+      - user.years_drinking.each_slice(3) do | group |
         .boxes-tables.pure-g
-          - group.each do | year, stat |
+          - group.each do | year |
+            - stat = user.get_stats_for_year(year)
             = haml(:_box, :locals => {'year' => year, 'stat' => stat, 'user' => locals['user']})
 
     %p{:style => "text-align: center"}
