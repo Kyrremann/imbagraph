@@ -6,7 +6,6 @@ require 'haml'
 require 'securerandom'
 
 require_relative 'models/init'
-require_relative 'stats'
 require_relative 'feed_pg'
 
 class ImbaGraph < Sinatra::Application
