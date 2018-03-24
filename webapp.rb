@@ -43,15 +43,21 @@ class ImbaGraph < Sinatra::Application
     username = params['username'].downcase
     filename = params['file_ref'][:tempfile]
     uuid = params['uuid']
-    if uuid
-      user = User.find(:uuid => uuid, :username => username)
+
+    if not uuid.empty?
+      user = User.find(:username => username, :uuid => uuid)
       unless user
         flash.next['error'] = "Not valid uuid for user"
         redirect("/stats/#{username}/upload")
       end
     else
+      user = User.find(:username => username)
+      unless user
+        user = User.new(:username => username)
+      end
       uuid = SecureRandom.uuid
-      user = User.create(:uuid => uuid, :username => username)
+      user.uuid = uuid
+      user.save
     end
     
     rows = populate(user, filename)
@@ -73,14 +79,4 @@ class ImbaGraph < Sinatra::Application
     session[:rows] = nil
     haml(:welcome, :locals => {'uuid' => uuid, 'username' => username, 'rows' => rows})
   end
-
-  get '/invalid' do
-    haml(:invalid)
-  end
-end
-
-private
-$months = ["dummy_month", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-def get_month_name(month)
-  return $months[month]
 end
