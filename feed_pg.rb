@@ -4,8 +4,15 @@ require_relative 'models/init'
 require 'date'
 require 'json'
 
-def populate(user, untappd_json)
+def populate(user, filename)
+  file = File.read(filename)
+  untappd_json = JSON.parse(file)
+
+  rows = 0
   untappd_json.each do | check_in |
+    checked_in = check_in['created_at']
+    next if Checkin.find(:user_id => user.id, :checked_in => checked_in)
+
     brewery_name = check_in['brewery_name']
     brewery = Brewery.find(:name => brewery_name)
     unless brewery
@@ -46,12 +53,14 @@ def populate(user, untappd_json)
                           :purchase_venue => check_in['purchase_venue'],
                           :rating_score => check_in['rating_score'].to_i,
                           :serving_type => check_in['serving_type'],
-                          :checked_in => check_in['created_at'])
+                          :checked_in => checked_in)
     checkin.beer = beer
     checkin.user = user
     checkin.venue = venue if venue
     checkin.save
+    rows += 1
   end
+  rows
 end
 
 if __FILE__ == $PROGRAM_NAME
@@ -73,9 +82,6 @@ if __FILE__ == $PROGRAM_NAME
   unless user
     user = User.create(:username => username)
   end
-  
-  file = File.read(filename)
-  untappd_json = JSON.parse(file)
 
-  populate(user, untappd_json)
+  populate(user, filename)
 end

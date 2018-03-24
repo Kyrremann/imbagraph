@@ -270,3 +270,8 @@ p {
     background-color: #43AC6A;
     color: #FFFFFF;
 }
+
+.alert .error {
+    background-color: #f04124;
+    color: #FFFFFF;
+}

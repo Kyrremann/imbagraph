@@ -8,7 +8,10 @@
     %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
 
   %body
+    .alert
+      = styled_flash
     .banner
+      = haml(:_menu, :locals => {'username' => locals['username']})
       %h1.banner-head
         I might be an alcoholic
         %br
@@ -29,7 +32,7 @@
         %form.pure-form.pure-form-stacked{"accept-charset" => "utf-8", :action => "/upload", :role => "form", :enctype => "multipart/form-data", :method => "post"}
           .pure-control-group
             %label.hidden{:for => "username"} Username:
-            %input.hidden{:type => "text", :name => "username", :required => "", :value => locals['user']}
+            %input.hidden{:type => "text", :name => "username", :required => "", :value => locals['username']}
 
           .pure-control-group
             %label{:for => "uuid"} UUID:
