@@ -24,7 +24,7 @@ def extract_tagged(doc)
 end
 
 def retrieve_new_tagged(user)
-  checkins = Checkins.where(:user_id => user.id, :parsed_tagged => false).first(15)
+  checkins = Checkin.where(:user_id => user.id, :parsed_tagged => false).first(15)
   checkins.each do |checkin|
     next if checkin.parsed_tagged
     p checkin.checked_in
