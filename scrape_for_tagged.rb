@@ -23,8 +23,8 @@ def extract_tagged(doc)
   return tagged.flatten
 end
 
-def retrieve_new_tagged(user)
-  checkins = Checkin.where(:user_id => user.id, :parsed_tagged => false).first(15)
+def retrieve_new_tagged
+  checkins = Checkin.where(:parsed_tagged => false).first(15)
   checkins.each do |checkin|
     next if checkin.parsed_tagged
     p checkin.checked_in
@@ -34,7 +34,7 @@ def retrieve_new_tagged(user)
     tagged.each do |username|
       tagged_user = User.find(:username => username)
       tagged_user = User.create(:username => username) unless tagged_user
-      Tagged.create(:user_id => user.id,
+      Tagged.create(:user_id => checkin.user_id,
                     :tagged_user_id => tagged_user.id,
                     :checkin_id => checkin.id)
     end
@@ -44,4 +44,4 @@ def retrieve_new_tagged(user)
   end
 end
 
-retrieve_new_tagged(User.first)
+retrieve_new_tagged
