@@ -1,6 +1,7 @@
 class User < Sequel::Model
   one_to_many :checkins
   many_to_many :beers, join_table: :checkins
+  many_to_many :tagged, join_table: :checkins
 
   def beers_for_year(year)
     checkins_for_year = Checkin.where(:user_id => self.id, Sequel.extract(:year, :checked_in) => year)
