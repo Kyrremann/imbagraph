@@ -23,8 +23,8 @@ def extract_tagged(doc)
   return tagged.flatten
 end
 
-def retrieve_new_tagged
-  checkins = Checkin.where(:parsed_tagged => false).first(15)
+def retrieve_new_tagged(rows=15)
+  checkins = Checkin.where(:parsed_tagged => false).first(rows)
   checkins.each do |checkin|
     next if checkin.parsed_tagged
     p checkin.checked_in
@@ -44,4 +44,7 @@ def retrieve_new_tagged
   end
 end
 
-retrieve_new_tagged
+if __FILE__ == $PROGRAM_NAME
+  rows = ARGV[0].to_i
+  retrieve_new_tagged(rows)
+end
