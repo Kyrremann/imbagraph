@@ -1,11 +1,7 @@
 !!! 5
 %html
   %head
-    %title= "Imbagraph"
-    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
-    %link{:crossorigin => "anonymous", :href => "https://unpkg.com/purecss@1.0.0/build/pure-min.css", :integrity => "sha384-", :rel => "stylesheet"}/
-    %link{:href => "https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css", :rel => "stylesheet"}/
-    %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
+    = haml(:_header, :locals => {'title' => 'Imbagraph'})
 
   %body
     - user = locals['user']
@@ -25,5 +21,4 @@
             - stat = user.get_stats_for_year(year)
             = haml(:_box, :locals => {'year' => year, 'stat' => stat, 'user' => locals['user']})
 
-    %p{:style => "text-align: center"}
-      Site and content subject to sudden change due to miscalculated Balmer's peak
+    = haml(:_footer)

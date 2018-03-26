@@ -1,11 +1,7 @@
 !!! 5
 %html
   %head
-    %title= "ImbaGraph"
-    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
-    %link{:crossorigin => "anonymous", :href => "https://unpkg.com/purecss@1.0.0/build/pure-min.css", :integrity => "sha384-", :rel => "stylesheet"}/
-    %link{:href => "https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css", :rel => "stylesheet"}/
-    %link{:href => "/css/imbagraph.css", :rel => "stylesheet"}/
+    = haml(:_header, :locals => {'title' => 'Imbagraph'})
 
   %body
     .banner
@@ -26,3 +22,5 @@
           = locals['uuid']
         %a.button-secondary.pure-button.menu-button{:href => "/stats/#{locals['username']}"}
           Your stats
+
+    = haml(:_footer)
