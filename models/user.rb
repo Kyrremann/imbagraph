@@ -1,7 +1,7 @@
 class User < Sequel::Model
   one_to_many :checkins
   many_to_many :beers, join_table: :checkins
-  many_to_many :tagged, join_table: :checkins
+  one_to_many :tagged
 
   def beers_for_year(year)
     checkins_for_year = Checkin.where(:user_id => self.id, Sequel.extract(:year, :checked_in) => year)
@@ -35,13 +35,13 @@ class User < Sequel::Model
 
   def get_stats_for_year(year)
     days_in_year = days_drinking(year)
-    checkins_for_year = Checkin.where(:user_id => id, Sequel.extract(:year, :checked_in) => year)
+    checkins_for_year = Checkin.where(Sequel.qualify(:checkins, :user_id) => id, Sequel.extract(:year, :checked_in) => year)
     beer_stats_for_periode(checkins_for_year, days_in_year)
   end
 
   def get_stats_for_month(year, month)
     days_in_month = Date.new(year, month, -1).day
-    checkins_for_month = Checkin.where(:user_id => id, Sequel.extract(:year, :checked_in) => year, Sequel.extract(:month, :checked_in) => month)
+    checkins_for_month = Checkin.where(Sequel.qualify(:checkins, :user_id) => id, Sequel.extract(:year, :checked_in) => year, Sequel.extract(:month, :checked_in) => month)
     beer_stats_for_periode(checkins_for_month, days_in_month)
   end
 
@@ -52,9 +52,17 @@ class User < Sequel::Model
       beers = checkins.select(:name.as(:beer_name), :abv, :brewery_id, :checked_in).join(:beers, :id => :beer_id)
       venues = checkins.select(:name.as(:venue_name), :country.as(:venue_country)).join(:venues, :id => :venue_id)
       breweries = checkins.select(:brewery_id).join(:beers, :id => :beer_id).select(Sequel.qualify(:breweries, :name).as(:brewery_name), :country.as(:brewery_country)).join(:breweries, :id => :brewery_id)
-      
       most_per_day = checkins.group_and_count(Sequel.function(:date, :checked_in)).order(Sequel.desc(:count)).first
       most_unique_per_day = beers.group_and_count(Sequel.function(:date, :checked_in)).order(Sequel.desc(:count)).first
+      most_tagged = checkins.join(:tagged, :checkin_id => :id).group_and_count(:tagged_user_id).order(Sequel.desc(:count)).first
+      if most_tagged
+        tagged_count = most_tagged[:count]
+        tagged_username = User.first(:id => most_tagged[:tagged_user_id])[:username]
+      else
+        tagged_count = -1
+        tagged_username = ""
+      end
+
       return {
         "total" => checkins.count,
         "total_unique" => beers.distinct(:beer_name).count,
@@ -66,7 +74,9 @@ class User < Sequel::Model
         "venues" => venues.distinct(:venue_name).count,
         "most_per_day" => most_per_day,
         "most_unique_per_day" => most_unique_per_day,
-        "avg_per_day" => (checkins.count / days_in_periode.to_f).round(2)
+        "avg_per_day" => (checkins.count / days_in_periode.to_f).round(2),
+        "tagged_count" => tagged_count,
+        "tagged_username" => tagged_username
       }
     end
   end
@@ -82,7 +92,8 @@ class User < Sequel::Model
       "venues" => 0,
       "most_per_day" => 0,
       "most_unique_per_day" => 0,
-      "avg_per_day" => 0
+      "avg_per_day" => 0,
+      "most_tagged" => 0
     }
   end
 end

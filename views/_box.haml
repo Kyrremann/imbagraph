@@ -30,5 +30,7 @@
           %li Most beers per day: #{stat['most_per_day'][:count]} (#{stat['most_per_day'][:date]})
           %li Most unique per day: #{stat['most_unique_per_day'][:count]} (#{stat['most_unique_per_day'][:date]})
           %li Avg per day: #{stat['avg_per_day']}
+          - unless stat['tagged_count'] == -1
+            %li Tagged most: #{stat['tagged_username']} tagged #{stat['tagged_count']}
         - if button
           %a.button-choose.pure-button{:href => "/stats/#{locals['user'].username}/#{locals['year']}"} Monthly
