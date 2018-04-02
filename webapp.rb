@@ -13,7 +13,7 @@ class ImbaGraph < Sinatra::Application
   enable :sessions
 
   get '/' do
-    'hello world'
+    haml(:index)
   end
 
   get '/stats/:username/upload' do

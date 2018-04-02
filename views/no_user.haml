@@ -1,16 +1,13 @@
 !!! 5
 %html
   %head
-    = haml(:_header, :locals => {'title' => 'Imbagraph'})
+    = haml(:_head, locals: {'title': 'Imbagraph'})
 
   %body
-    .banner
-      %h1.banner-head
-        You might be an alcoholic
-        %br
-        but we can't find you in our system
+    - username = locals['username']
+    = haml(:_header, locals: {'title': 'You might be an alcoholic', 'subtitle': 'but we can\'t find you in our system'})
 
-    %div{:style => "text-align: center"}
+    %div{style: "text-align: center"}
       %h1
         No such user
     .pure-g
@@ -25,7 +22,7 @@
         %form.pure-form.pure-form-stacked{"accept-charset" => "utf-8", :action => "/upload", :role => "form", :enctype => "multipart/form-data", :method => "post"}
           .pure-control-group
             %label{:for => "username"} Username:
-            %input{:type => "text", :name => "username", :required => "", :value => locals['username']}
+            %input{:type => "text", :name => "username", :required => "", value: username}
 
           .pure-control-group
             %label{:for => "file_ref"} JSON:

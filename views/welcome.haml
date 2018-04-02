@@ -1,14 +1,11 @@
 !!! 5
 %html
   %head
-    = haml(:_header, :locals => {'title' => 'Imbagraph'})
+    = haml(:_head, :locals => {'title' => 'Imbagraph'})
 
   %body
-    .banner
-      %h1.banner-head
-        You might be an alcoholic
-        %br
-        and we are looking forward tasting your stats
+    - username = locals['username']
+    = (haml:_header, locals: {'title': 'You might be an alcoholic', 'subtitle': 'and we are looking forward tasting your stats', 'username': username})
 
     %div{:style => "text-align: center"}
       %h1
@@ -20,7 +17,7 @@
           You are now registred in the Imbagraph database, to see your stats go to the link below. We added #{rows} check ins! Also remember this UUID, to upload more data later.
         %p
           = locals['uuid']
-        %a.button-secondary.pure-button.menu-button{:href => "/stats/#{locals['username']}"}
+        %a.button-secondary.pure-button.menu-button{:href => "/stats/#{username}"}
           Your stats
 
     = haml(:_footer)

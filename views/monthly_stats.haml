@@ -1,24 +1,17 @@
 !!! 5
 %html
   %head
-    = haml(:_header, :locals => {'title' => 'Imbagraph'})
+    = haml(:_head, locals: {'title': 'Imbagraph'})
 
   %body
     - user = locals['user']
     - year = locals['year']
-    .alert
-      = styled_flash
-    .banner
-      = haml(:_menu, :locals => {'username' => user.username})
-      %h1.banner-head
-        I might be an alcoholic
-        %br
-        As in #{year} i had #{user.beers_for_year(year).count} beers, and i started drinking #{user.first_beer(year).strftime("%d.%m %H:%M")}, averaging #{user.avg_beers(year).round(2)} beers a day
+    = haml(:_header, locals: {'title': 'I might be an alcoholic', 'subtitle': "As in #{year} i had #{user.beers_for_year(year).count} beers, and i started drinking #{user.first_beer(year).strftime("%d.%m %H:%M")}, averaging #{user.avg_beers(year).round(2)} beers a day", 'username': user.username})
 
     .l-content
       - user.months_drinking(year).each_slice(3) do | months |
         .boxes-tables.pure-g
           - months.each do | month |
-            = haml(:_box, :locals => {'month' => month, 'stat' => user.get_stats_for_month(year, month)})
+            = haml(:_box, locals: {'month': month, 'stat': user.get_stats_for_month(year, month)})
 
     = haml(:_footer)

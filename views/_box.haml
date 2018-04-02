@@ -1,17 +1,19 @@
-- stat = locals['stat']
-- if locals['year']
-  - header = locals['year']
+- stat = locals[:'stat']
+- year = locals[:'year']
+- if year
+  - header = year
   - button = true
   - padding = ""
+  - username = locals[:'user'].username
 - else
-  - header = Date::MONTHNAMES[locals['month']]
+  - header = Date::MONTHNAMES[locals[:'month']]
   - button = false
   - padding = "padding: 0;"
 
 .pure-u-1.pure-u-md-1-3
-  .boxes-table{:style => padding}
+  .boxes-table{style: padding}
     - table_class = stat['total'] == 0 ? "boxes-table-empty" : "boxes-table-free"
-    %div{:class => table_class}
+    %div{class: table_class}
       .boxes-table-header
         %h2
           = header
@@ -30,7 +32,9 @@
           %li Most beers per day: #{stat['most_per_day'][:count]} (#{stat['most_per_day'][:date]})
           %li Most unique per day: #{stat['most_unique_per_day'][:count]} (#{stat['most_unique_per_day'][:date]})
           %li Avg per day: #{stat['avg_per_day']}
-          - unless stat['tagged_count'] == -1
+          - if stat['tagged_count'] > -1
             %li Tagged most: #{stat['tagged_username']} tagged #{stat['tagged_count']}
+          - else
+            %li Tagged most: no friend tagged
         - if button
-          %a.button-choose.pure-button{:href => "/stats/#{locals['user'].username}/#{locals['year']}"} Monthly
+          %a.button-choose.pure-button{:href => "/stats/#{username}/#{year}"} Monthly

@@ -1,19 +1,13 @@
 !!! 5
 %html
   %head
-    = haml(:_header, :locals => {'title' => 'Imbagraph'})
+    = haml(:_head, locals: {'title': 'Imbagraph'})
 
   %body
-    .alert
-      = styled_flash
-    .banner
-      = haml(:_menu, :locals => {'username' => locals['username']})
-      %h1.banner-head
-        I might be an alcoholic
-        %br
-        Time for some new check-ins
+    - username = locals['username']
+    = haml(:_header, locals: {'title': 'I might be an alcoholic', 'subtitle': 'Time for some new check-ins', 'username': username})
 
-    %div{:style => "text-align: center"}
+    %div{style: "text-align: center"}
       %h1
         Moar data plx
     .pure-g
@@ -27,8 +21,8 @@
       .pure-u-2-3
         %form.pure-form.pure-form-stacked{"accept-charset" => "utf-8", :action => "/upload", :role => "form", :enctype => "multipart/form-data", :method => "post"}
           .pure-control-group
-            %label.hidden{:for => "username"} Username:
-            %input.hidden{:type => "text", :name => "username", :required => "", :value => locals['username']}
+            %label.hidden{for: "username"} Username:
+            %input.hidden{type: "text", name: "username", required: "", value: username}
 
           .pure-control-group
             %label{:for => "uuid"} UUID:

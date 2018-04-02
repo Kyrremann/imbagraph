@@ -1,4 +1,11 @@
-%a.button-secondary.pure-button.menu-button{:href => "/stats/#{locals['username']}"}
-  Home
-%a.button-secondary.pure-button.menu-button.pull-right{:href => "/stats/#{locals['username']}/upload"}
-  Upload
+- username = locals[:'username']
+.pure-menu.pure-menu-horizontal
+  %a.pure-menu-heading.pure-menu-link{:href => "/"} Imbagraph
+  - if username
+    %ul.pure-menu-list
+      %li.pure-menu-item
+        %a.pure-menu-link{:href => "/stats/#{username}/"} Stats
+      %li.pure-menu-item
+        %a.pure-menu-link{:href => "/stats/#{username}/tagged"} Tagged
+      %li.pure-menu-item
+        %a.pure-menu-link{:href => "/stats/#{username}/upload"} Upload
