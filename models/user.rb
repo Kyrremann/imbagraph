@@ -29,7 +29,12 @@ class User < Sequel::Model
 
   def days_drinking(year=nil)
     start_date = first_beer(year).to_date
-    end_date = year.nil? ? Time.now.to_date : Date.new(year, 12, 31)
+    if year == Date.today.year or year.nil?
+      end_date = Date.today
+    else
+      end_date = Date.new(year, 12, 31)
+    end
+
     end_date - start_date
   end
 
@@ -40,7 +45,13 @@ class User < Sequel::Model
   end
 
   def get_stats_for_month(year, month)
-    days_in_month = Date.new(year, month, -1).day
+    today = Date.today
+    if year == today.year and month == today.month
+      days_in_month = today.day
+    else
+      days_in_month = Date.new(year, month, -1).day
+    end
+
     checkins_for_month = Checkin.where(Sequel.qualify(:checkins, :user_id) => id, Sequel.extract(:year, :checked_in) => year, Sequel.extract(:month, :checked_in) => month)
     beer_stats_for_periode(checkins_for_month, days_in_month)
   end
