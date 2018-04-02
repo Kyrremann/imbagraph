@@ -16,17 +16,24 @@ class ImbaGraph < Sinatra::Application
     haml(:index)
   end
 
+  get '/stats/:username/tagged' do
+    username = params['username'].downcase
+    user = User.find(:username => username)
+    return haml(:no_user, :locals => {'username' => username}) if user.nil? or user.checkins.empty?
+    haml(:tagged, :locals => {'user' => user})
+  end
+
   get '/stats/:username/upload' do
     username = params['username'].downcase
     user = User.find(:username => username)
-    return haml(:no_user, :locals => {'username' => username}) unless user
+    return haml(:no_user, :locals => {'username' => username}) if user.nil? or user.checkins.empty?
     haml(:upload, :locals => {'username' => username})
   end
 
   get '/stats/:username/:year/?' do
     username = params['username'].downcase
     user = User.find(:username => username)
-    return haml(:no_user, :locals => {'user' => username}) unless user
+    return haml(:no_user, :locals => {'user' => username}) if user.nil? or user.checkins.empty?
     year = params['year'].to_i
 
     haml(:monthly_stats, :locals => {"user" => user, 'year' => year})
@@ -35,7 +42,7 @@ class ImbaGraph < Sinatra::Application
   get '/stats/:username/?' do
     username = params['username'].downcase
     user = User.find(:username => username)
-    return haml(:no_user, :locals => {'username' => username}) unless user
+    return haml(:no_user, :locals => {'username' => username}) if user.nil? or user.checkins.empty?
     haml(:yearly_stats, :locals => {"user" => user})
   end
 

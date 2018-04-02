@@ -1,0 +1,27 @@
+!!! 5
+%html
+  %head
+    = haml(:_head, locals: {'title': 'Imbagraph'})
+
+  %body
+    - user = locals['user']
+    - tagged = Tagged.where(user_id: user.id).group_and_count(:tagged_user_id).order(Sequel.desc(:count))
+    - most_tagged_user = User[tagged.first[:tagged_user_id]]
+    = haml(:_header, locals: {'title': 'I might be an alcoholic', 'subtitle': "but at least I have friends like <a href=\"/stats/#{most_tagged_user.username}\">#{most_tagged_user.username}</a>, who have had #{tagged.first[:count]} beers with me", 'username': user.username})
+
+    .l-content.information.pure-g
+      .pure-u-1
+        %table.pure-table.pure-table-striped{style: "width: 100%;"}
+          %thead
+            %tr
+              %th User
+              %th Tagged
+          %tbody
+            - tagged.each do |tag|
+              %tr
+                %td
+                  - username = User[tag[:tagged_user_id]].username
+                  %a{href: "/stats/#{username}"}
+                    = username
+                %td
+                  = tag[:count]
