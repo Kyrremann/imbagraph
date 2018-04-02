@@ -1,0 +1,29 @@
+!!! 5
+%html
+  %head
+    = haml(:_head, locals: {'title': 'Imbagraph'})
+
+  %body
+    - user = locals['user']
+    - breweries = Brewery.select(Sequel.qualify(:breweries, :id), Sequel.qualify(:breweries, :name), :country).join(:beers, brewery_id: :id).join(:checkins, beer_id: Sequel.qualify(:beers, :id), user_id: user.id).distinct(Sequel.qualify(:breweries, :name)).order(Sequel.qualify(:breweries, :name))
+    - counts = Brewery.join(:beers, brewery_id: :id).join(:checkins, beer_id: Sequel.qualify(:beers, :id), user_id: user.id).group_and_count(:brewery_id)
+    = haml(:_header, locals: {'title': 'I might be an alcoholic', 'subtitle': "as I have had beers from #{breweries.count} different breweries", 'username': user.username})
+    .l-content.information.pure-g
+      .pure-u-1
+        %table.pure-table.pure-table-striped{style: "width: 100%;"}
+          %thead
+            %tr
+              %th Brewery
+              %th Beers
+              %th Country
+          %tbody
+            - breweries.each do |brewery|
+              %tr
+                %td
+                  = brewery.name
+                %td
+                  = counts.first(brewery_id: brewery.id)[:count]
+                %td
+                  = brewery.country
+
+    = haml(:_footer)
