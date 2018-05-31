@@ -2,25 +2,33 @@
 - counts = Checkin.where(user_id: user.id).group_and_count(:beer_id).order(Sequel.desc(:count))
 - locals[:subtitle] = "as I have had #{beers.count} different beers"
 .l-content.information.pure-g
-  .pure-u-1
+  .pure-u-1#beers
+    %input.search{placeholder: "Filter"}/
     %table.pure-table.pure-table-striped{style: "width: 100%;"}
       %thead
         %tr
-          %th Beer
-          %th ABV
-          %th IBU
-          %th Checkins
-          %th Brewery
-      %tbody
+          %th.sort{'data-sort': 'beer'} Beer
+          %th.sort{'data-sort': 'abv', style: "min-width: 2.7em;"} ABV
+          %th.sort{'data-sort': 'ibu', style: "min-width: 2.7em;"} IBU
+          %th.sort{'data-sort': 'checkins', style: "min-width: 5.1em;"} Checkins
+          %th.sort{'data-sort': 'brewery'} Brewery
+      %tbody.list
         - beers.each do |beer|
           %tr
-            %td
+            %td.beer
               = beer.name
-            %td
+            %td.abv
               = beer.abv
-            %td
+            %td.ibu
               = beer.ibu
-            %td
+            %td.checkins
               = counts.first(beer_id: beer.id)[:count]
-            %td
+            %td.brewery
               = Brewery[beer.brewery_id].name
+
+:javascript
+  let options = {
+    valueNames: [ 'beer', 'abv', 'ibu', 'checkins', 'brewery' ]
+  };
+
+  let beers = new List('beers', options);
