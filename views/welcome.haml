@@ -1,23 +1,14 @@
-!!! 5
-%html
-  %head
-    = haml(:_head, :locals => {'title' => 'Imbagraph'})
+- locals[:subtitle] = 'and we are looking forward tasting your stats'
 
-  %body
-    - username = locals['username']
-    = (haml:_header, locals: {'title': 'You might be an alcoholic', 'subtitle': 'and we are looking forward tasting your stats', 'username': username})
-
-    %div{:style => "text-align: center"}
-      %h1
-        Welcome
-    .pure-g
-      .pure-u-1-3
-      .pure-u-1-3
-        %p
-          You are now registred in the Imbagraph database, to see your stats go to the link below. We added #{rows} check ins! Also remember this UUID, to upload more data later.
-        %p
-          = locals['uuid']
-        %a.button-secondary.pure-button.menu-button{:href => "/stats/#{username}"}
-          Your stats
-
-    = haml(:_footer)
+%div{style: "text-align: center"}
+  %h1
+    Welcome
+.pure-g
+  .pure-u-1-3
+  .pure-u-1-3
+    %p
+      You are now registred in the Imbagraph database, to see your stats go to the link below. We added #{rows} check ins! Also remember this UUID, to upload more data later.
+    %p
+      = uuid
+    %a.button-secondary.pure-button.menu-button{href: "/stats/#{username}"}
+      Your stats

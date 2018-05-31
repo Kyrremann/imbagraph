@@ -6,58 +6,14 @@ require 'haml'
 require 'securerandom'
 
 require_relative 'models/init'
+require_relative 'routes/init'
 require_relative 'feed_pg'
 
 class ImbaGraph < Sinatra::Application
-
-  enable :sessions
+  enable(:sessions)
 
   get '/' do
     haml(:index)
-  end
-
-  get '/stats/:username/beers' do
-    username = params['username'].downcase
-    user = User.find(:username => username)
-    return haml(:no_user, :locals => {'username' => username}) if user.nil? or user.checkins.empty?
-    haml(:beers, :locals => {'user' => user})
-  end
-
-  get '/stats/:username/breweries' do
-    username = params['username'].downcase
-    user = User.find(:username => username)
-    return haml(:no_user, :locals => {'username' => username}) if user.nil? or user.checkins.empty?
-    haml(:breweries, :locals => {'user' => user})
-  end
-
-  get '/stats/:username/upload' do
-    username = params['username'].downcase
-    user = User.find(:username => username)
-    return haml(:no_user, :locals => {'username' => username}) if user.nil? or user.checkins.empty?
-    haml(:upload, :locals => {'username' => username})
-  end
-
-  get '/stats/:username/tagged' do
-    username = params['username'].downcase
-    user = User.find(:username => username)
-    return haml(:no_user, :locals => {'username' => username}) if user.nil? or user.checkins.empty?
-    haml(:tagged, :locals => {'user' => user})
-  end
-
-  get '/stats/:username/:year/?' do
-    username = params['username'].downcase
-    user = User.find(:username => username)
-    return haml(:no_user, :locals => {'user' => username}) if user.nil? or user.checkins.empty?
-    year = params['year'].to_i
-
-    haml(:monthly_stats, :locals => {"user" => user, 'year' => year})
-  end
-
-  get '/stats/:username/?' do
-    username = params['username'].downcase
-    user = User.find(:username => username)
-    return haml(:no_user, :locals => {'username' => username}) if user.nil? or user.checkins.empty?
-    haml(:yearly_stats, :locals => {"user" => user})
   end
 
   post '/upload' do
@@ -98,6 +54,6 @@ class ImbaGraph < Sinatra::Application
     uuid = session[:uuid]
     rows = session[:rows]
     session[:rows] = nil
-    haml(:welcome, :locals => {'uuid' => uuid, 'username' => username, 'rows' => rows})
+    haml(:welcome, :locals => {uuid: uuid, username: username, rows: rows})
   end
 end

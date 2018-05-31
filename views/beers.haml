@@ -1,35 +1,26 @@
-!!! 5
-%html
-  %head
-    = haml(:_head, locals: {'title': 'Imbagraph'})
-
-  %body
-    - user = locals['user']
-    - beers = Beer.select(Sequel.qualify(:beers, :id), :name, :abv, :ibu, :brewery_id).join(:checkins, beer_id: :id, user_id: user.id).distinct(Sequel.qualify(:beers, :name)).order(Sequel.qualify(:beers, :name))
-    - counts = Checkin.where(user_id: user.id).group_and_count(:beer_id).order(Sequel.desc(:count))
-    = haml(:_header, locals: {'title': 'I might be an alcoholic', 'subtitle': "as I have had #{beers.count} different beers", 'username': user.username})
-    .l-content.information.pure-g
-      .pure-u-1
-        %table.pure-table.pure-table-striped{style: "width: 100%;"}
-          %thead
-            %tr
-              %th Beer
-              %th ABV
-              %th IBU
-              %th Checkins
-              %th Brewery
-          %tbody
-            - beers.each do |beer|
-              %tr
-                %td
-                  = beer.name
-                %td
-                  = beer.abv
-                %td
-                  = beer.ibu
-                %td
-                  = counts.first(beer_id: beer.id)[:count]
-                %td
-                  = Brewery[beer.brewery_id].name
-
-    = haml(:_footer)
+- beers = Beer.select(Sequel.qualify(:beers, :id), :name, :abv, :ibu, :brewery_id).join(:checkins, beer_id: :id, user_id: user.id).distinct(Sequel.qualify(:beers, :name)).order(Sequel.qualify(:beers, :name))
+- counts = Checkin.where(user_id: user.id).group_and_count(:beer_id).order(Sequel.desc(:count))
+- locals[:subtitle] = "as I have had #{beers.count} different beers"
+.l-content.information.pure-g
+  .pure-u-1
+    %table.pure-table.pure-table-striped{style: "width: 100%;"}
+      %thead
+        %tr
+          %th Beer
+          %th ABV
+          %th IBU
+          %th Checkins
+          %th Brewery
+      %tbody
+        - beers.each do |beer|
+          %tr
+            %td
+              = beer.name
+            %td
+              = beer.abv
+            %td
+              = beer.ibu
+            %td
+              = counts.first(beer_id: beer.id)[:count]
+            %td
+              = Brewery[beer.brewery_id].name

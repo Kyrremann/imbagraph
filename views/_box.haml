@@ -1,12 +1,10 @@
-- stat = locals[:'stat']
-- year = locals[:'year']
-- if year
+- if locals[:year]
   - header = year
   - button = true
   - padding = ""
-  - username = locals[:'user'].username
+  - username = user.username
 - else
-  - header = Date::MONTHNAMES[locals[:'month']]
+  - header = Date::MONTHNAMES[month]
   - button = false
   - padding = "padding: 0;"
 
@@ -37,4 +35,4 @@
           - else
             %li Tagged most: no friend tagged
         - if button
-          %a.button-choose.pure-button{:href => "/stats/#{username}/#{year}"} Monthly
+          %a.button-choose.pure-button{:href => "/stats/#{user.username}/#{year}"} Monthly

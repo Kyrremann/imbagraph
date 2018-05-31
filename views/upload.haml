@@ -1,38 +1,29 @@
-!!! 5
-%html
-  %head
-    = haml(:_head, locals: {'title': 'Imbagraph'})
+- locals[:subtitle] = 'so it\'s time for some new check-ins'
 
-  %body
-    - username = locals['username']
-    = haml(:_header, locals: {'title': 'I might be an alcoholic', 'subtitle': 'Time for some new check-ins', 'username': username})
+%div{style: "text-align: center"}
+  %h1
+    Moar data plx
+.pure-g
+  .pure-u-1-3
+  .pure-u-1-3
+    %p
+      We need your UUID to update your data.
 
-    %div{style: "text-align: center"}
-      %h1
-        Moar data plx
-    .pure-g
-      .pure-u-1-3
-      .pure-u-1-3
-        %p
-          We need your UUID to update your data.
+.pure-g
+  .pure-u-1-3
+  .pure-u-2-3
+    %form.pure-form.pure-form-stacked{'accept-charset': "utf-8", action: "/upload", role: "form", enctype: "multipart/form-data", method: "post"}
+      .pure-control-group
+        %label.hidden{for: "username"} Username:
+        %input.hidden{type: "text", name: "username", required: "", value: user.username}
 
-    .pure-g
-      .pure-u-1-3
-      .pure-u-2-3
-        %form.pure-form.pure-form-stacked{"accept-charset" => "utf-8", :action => "/upload", :role => "form", :enctype => "multipart/form-data", :method => "post"}
-          .pure-control-group
-            %label.hidden{for: "username"} Username:
-            %input.hidden{type: "text", name: "username", required: "", value: username}
+      .pure-control-group
+        %label{for: "uuid"} UUID:
+        %input{type: "text", name: "uuid"}
 
-          .pure-control-group
-            %label{:for => "uuid"} UUID:
-            %input{:type => "text", :name => "uuid"}
+      .pure-control-group
+        %label{for: "file_ref"} JSON:
+        %input{name: "file_ref", type: "file", required: ""}
 
-          .pure-control-group
-            %label{:for => "file_ref"} JSON:
-            %input{:name => "file_ref", :type => "file", :required => ""}
-
-          .pure-control-group
-            %button.pure-button{:type => "submit", :name => "update"} update
-
-    = haml(:_footer)
+      .pure-control-group
+        %button.pure-button{type: "submit", name: "update"} update

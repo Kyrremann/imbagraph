@@ -1,17 +1,8 @@
-!!! 5
-%html
-  %head
-    = haml(:_head, locals: {'title': 'Imbagraph'})
+- locals[:subtitle] = "as I have had #{user.beers.count} beers since #{user.first_beer.to_date.strftime('%d.%m.%Y')}, averaging #{user.avg_beers.round(2)} beers a day"
 
-  %body
-    - user = locals['user']
-    = haml(:_header, locals: {'title': 'I might be an alcoholic', 'subtitle': "As I have had #{user.beers.count} beers since #{user.first_beer.to_date.strftime('%d.%m.%Y')}, averaging #{user.avg_beers.round(2)} beers a day", 'username': user.username})
-
-    .l-content
-      - user.years_drinking.each_slice(3) do | group |
-        .boxes-tables.pure-g
-          - group.each do | year |
-            - stat = user.get_stats_for_year(year)
-            = haml(:_box, :locals => {'year': year, 'stat': stat, 'user': user})
-
-    = haml(:_footer)
+.l-content
+  - user.years_drinking.each_slice(3) do | group |
+    .boxes-tables.pure-g
+      - group.each do | year |
+        - stat = user.get_stats_for_year(year)
+        = haml(:_box, :locals => {year: year, stat: stat, user: user})
