@@ -267,6 +267,15 @@ p {
 /*
  * -- MENU --
  */
+
+#menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-bottom: 1px solid #eee;
+}
+
 .menu-button {
     position: absolute;
     margin: .5em;
