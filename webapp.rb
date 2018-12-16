@@ -21,7 +21,7 @@ class ImbaGraph < Sinatra::Application
     filename = params['file_ref'][:tempfile]
     uuid = params['uuid']
 
-    if not uuid.empty?
+    if uuid && uuid.empty?
       user = User.find(:username => username, :uuid => uuid)
       unless user
         flash.next['error'] = "Not valid uuid for user"
