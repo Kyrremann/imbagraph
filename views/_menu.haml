@@ -2,14 +2,18 @@
   .pure-u
     .pure-menu
       %a.pure-menu-heading.custom-brand{href: "/"} Imbagraph
-      - if locals[:user]
-        %a#toggle.custom-toggle{href: "#"}
-          %s.bar
-          %s.bar
-  - if locals[:user]
-    .pure-u-1.pure-u-md-1-3
-      .pure-menu.pure-menu-horizontal.custom-can-transform
-        %ul.pure-menu-list
+      %a#toggle.custom-toggle{href: "#"}
+        %s.bar
+        %s.bar
+  .pure-u-1.pure-u-md-1-3
+    .pure-menu.pure-menu-horizontal.custom-can-transform
+      %ul.pure-menu-list
+        - if locals[:user].nil?
+          %li.pure-menu-item
+            %a.pure-menu-link{href: "/users"} Users
+          %li.pure-menu-item
+            %a.pure-menu-link{href: "/about"} About
+        - else
           %li.pure-menu-item
             %a.pure-menu-link{href: "/stats/#{user.username}/"} Stats
           %li.pure-menu-item

@@ -49,11 +49,19 @@ class ImbaGraph < Sinatra::Application
     end
   end
 
-  get '/welcome' do
+  get '/welcome/?' do
     username = session[:username]
     uuid = session[:uuid]
     rows = session[:rows]
     session[:rows] = nil
     haml(:welcome, :locals => {uuid: uuid, username: username, rows: rows})
+  end
+
+  get '/users/?' do
+    haml(:users)
+  end
+
+  get '/about/?' do
+    haml(:about)
   end
 end

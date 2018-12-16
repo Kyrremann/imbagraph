@@ -1,0 +1,26 @@
+.l-content.information.pure-g
+  .pure-u-1#users
+    %input.search{placeholder: "Filter"}/
+    %table.pure-table.pure-table-striped{style: "width: 100%;"}
+      %thead
+        %tr
+          %th.sort{'data-sort': 'username'} username
+          %th.sort{'data-sort': 'unique_beers', style: "min-width: 2.7em;"} Unique beers
+          %th.sort{'data-sort': 'checkins', style: "min-width: 5.1em;"} Checkins
+      %tbody.list
+        - User.all.each do |user|
+          %tr
+            %td.username
+              %a{href: "/stats/#{user.username}"}
+                = user.username
+            %td.unqie_beers
+              -1
+            %td.checkins
+              = user.checkins.count
+
+:javascript
+  let options = {
+    valueNames: [ 'username', 'unique_beers', 'checkins' ]
+  };
+
+  let users = new List('users', options);

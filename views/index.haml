@@ -1,2 +1,21 @@
 .l-content.information
-  Welcome world
+  %p
+    Welcome world
+
+.l-content.information.pure-g
+  .pure-u-1
+    %table.pure-table.pure-table-striped{style: "width: 100%;"}
+      %thead
+        %tr
+          %th Username
+          %th Checkins
+          %th Unique beers
+          %th Last update
+      %tbody.list
+        - User.all.each do |user|
+          %tr
+            %td
+              = user.username
+            %td
+            %td
+            %td
